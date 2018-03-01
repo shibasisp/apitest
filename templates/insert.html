@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+  <h2>Insert New location</h2>
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+  <form action="{{ url_for('add') }}" method=post>
+    {{ form.hidden_tag() }}
+ 
+    {{ form.pincode.label }}
+    {{ form.pincode }}
+ 
+    {{ form.address.label }}
+    {{ form.address }}
+ 
+    {{ form.city.label }}
+    {{ form.city }}
+ 
+    {{ form.latitude.label }}
+    {{ form.latitude }}
+
+    {{ form.longitude.label }}
+    {{ form.longitude }}
+
+    {{ form.accuracy.label }}
+    {{ form.accuracy }}
+ 
+    {{ form.submit }}
+  </form>
+{% endblock %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Test</title>    
+    <strong><link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"></strong>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+    rel="stylesheet" href="//unpkg.com/purecss@0.6.2/build/pure-min.css"
+    integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD"
+    crossorigin="anonymous">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1 class="logo">API Test</h1>
+        <strong><nav>
+          <ul class="menu">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+          </ul>
+        </nav></strong>
+      </div>
+      </header>
+     
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
