@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+  <h2>Enter the coordinates and the radius</h2>
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+  <form action="{{ url_for('earthdistance_using_postgres') }}" method=post>
+    {{ form.hidden_tag() }}
+ 
+    {{ form.latitude.label }}
+    {{ form.latitude }}
+
+    {{ form.longitude.label }}
+    {{ form.longitude }}
+
+    {{ form.radius.label }}
+    {{ form.radius }}
+ 
+    {{ form.submit }}
+  </form>
+{% endblock %}

@@ -1,24 +1,3 @@
-# from app import db
-# from sqlalchemy.dialects.postgresql import JSON
-
-
-# class Zipcode(db.Model):
-#     __tablename__ = 'zipcodes'
-
-#     key = db.Column(db.String(9), primary_key=True)
-#     place_name = db.Column(db.String())
-#     admin_name1 = db.Column(db.String())
-#     latitude = db.Column(db.Numeric(precision=8, asdecimal=False, decimal_return_scale=None))
-#     longitude = db.Column(db.Numeric(precision=8, asdecimal=False, decimal_return_scale=None))
-#     accuracy = db.Column(db.Integer)
-
-#     def __init__(self, url, result_all, result_no_stop_words):
-#         pass
-        
-
-#     def __repr__(self):
-#         return '<id {}>'.format(self.id)
-
 import psycopg2
 from flask import jsonify, flash
 import os
@@ -33,7 +12,7 @@ class Database:
         admin_name1 varchar,
         latitude double precision,
         longitude double precision,
-        accuracy int);""")
+        accuracy int)""")
         self.con.commit()
 
     def load_data(self, location=None):
@@ -88,3 +67,32 @@ class Database:
             zips_as_dict.append(zip_as_dict)
         return jsonify(zips_as_dict)
 
+    def fetch_locations_using_self(self, latitude,longitude,radius):
+        """Reference taken from https://www.movable-type.co.uk/scripts/latlong-db.html"""
+
+        self.cur.execute("""select * from ( SELECT key,place_name,
+        admin_name1, latitude, longitude,
+        ( 6371 * acos(cos(radians(%s)) *
+        cos(radians(latitude)) *
+        cos(radians(longitude) -
+        radians(%s)) + 
+        sin(radians(%s)) *
+        sin(radians(latitude)))
+        ) AS "distance"
+        FROM zip_codes) x
+        WHERE distance < %s
+        ORDER BY distance""",(latitude,longitude,latitude,radius))
+        
+        rows =self.cur.fetchall()
+        zips_as_dict = []
+        for row in rows:
+            zip_as_dict = {
+                           "pincode":row[0],
+                           "address": row[1],
+                           "city": row[2],
+                           "latitude":row[3],
+                           "longitude":row[4],
+                           "distance":row[5]
+                        }
+            zips_as_dict.append(zip_as_dict)
+        return jsonify(zips_as_dict)
